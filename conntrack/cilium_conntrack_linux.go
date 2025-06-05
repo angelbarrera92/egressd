@@ -61,6 +61,12 @@ func listRecords(maps []interface{}, clockSource ClockSource, filter EntriesFilt
 			srcIP := k.DestAddr.IP() // Addresses are swapped due to cilium issue #21346.
 			dstIP := k.SourceAddr.IP()
 			val := v.(*ctmap.CtEntry)
+			// Print debug val
+			fmt.Printf("Debug: %+v\n", val)
+			if val == nil {
+				fmt.Printf("Debug: val is nil for key %+v\n", k)
+				return
+			}
 			expireSeconds := timeDiff(int64(val.Lifetime))
 			record := &Entry{
 				Src:       netaddr.IPPortFrom(netaddr.IPv4(srcIP[0], srcIP[1], srcIP[2], srcIP[3]), k.SourcePort),
