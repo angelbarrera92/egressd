@@ -65,10 +65,10 @@ func listRecords(maps []interface{}, clockSource ClockSource, filter EntriesFilt
 			record := &Entry{
 				Src:       netaddr.IPPortFrom(netaddr.IPv4(srcIP[0], srcIP[1], srcIP[2], srcIP[3]), k.SourcePort),
 				Dst:       netaddr.IPPortFrom(netaddr.IPv4(dstIP[0], dstIP[1], dstIP[2], dstIP[3]), k.DestPort),
-				TxBytes:   val.TxBytes,
-				TxPackets: val.TxPackets,
-				RxBytes:   val.RxBytes,
-				RxPackets: val.RxPackets,
+				TxBytes:   val.Bytes,
+				TxPackets: val.Packets,
+				RxBytes:   val.Bytes,
+				RxPackets: val.Packets,
 				Lifetime:  now.Add(time.Duration(expireSeconds) * time.Second),
 				Proto:     uint8(k.NextHeader),
 			}
@@ -85,7 +85,7 @@ func listRecords(maps []interface{}, clockSource ClockSource, filter EntriesFilt
 }
 
 func initMaps() []interface{} {
-	ctmap.InitMapInfo(2<<18, 2<<17, true, false, true)
+	ctmap.InitMapInfo(true, false, true)
 	maps := ctmap.GlobalMaps(true, false)
 	ctMaps := make([]interface{}, len(maps))
 	for i, m := range maps {
